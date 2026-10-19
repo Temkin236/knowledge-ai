@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-10-18T17:25:52Z",
+  "total_queries": 5,
+  "retrieval_hit_rate_pct": 100.0,
+  "abstention_accuracy_pct": 100.0,
+  "citation_validity_pct": 100.0,
+  "average_latency_ms": 22.25,
+  "results": [
+    {
+      "id": "eval-1",
+      "question": "What is the logical qubit count and error threshold of the Aurora-7 processor?",
+      "is_answerable": true,
+      "answer": "According to the source documents, In March 2026, Helios Labs announced the deployment of the Aurora-7 quantum processor. The system features 256 logical qubits with a fault-tolerant error threshold of 99.98%.  [quantum_computing_report.md]",
+      "citations_count": 1,
+      "passed": true,
+      "duration_ms": 31
+    },
+    {
+      "id": "eval-2",
+      "question": "At what temperature does the cooling apparatus operate and what refrigerant is used?",
+      "is_answerable": true,
+      "answer": "According to the source documents, The cooling apparatus operates at 15 millikelvin using a closed-loop helium-3 dilution refrigerator.  [quantum_computing_report.md]",
+      "citations_count": 1,
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "id": "eval-3",
+      "question": "How much was invested in the project and what are the projected Q4 operating margins?",
+      "is_answerable": true,
+      "answer": "According to the source documents, Helios Labs invested $420 million over four years into the project. Operating margins for the quantum cloud platform are projected to reach 34% by Q4 2026.  [quantum_computing_report.md]",
+      "citations_count": 1,
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "id": "eval-4",
+      "question": "What was the founder's favorite programming language in college?",
+      "is_answerable": false,
+      "answer": "I couldn't find enough information in the selected documents to answer that confidently. Try rephrasing the question or uploading a relevant source.",
+      "citations_count": 0,
+      "passed": true,
+      "duration_ms": 14
+    },
+    {
+      "id": "eval-5",
+      "question": "Which stock exchange did Helios Labs file its IPO on in 2024?",
+      "is_answerable": false,
+      "answer": "I couldn't find enough information in the selected documents to answer that confidently. Try rephrasing the question or uploading a relevant source.",
+      "citations_count": 0,
+      "passed": true,
+      "duration_ms": 36
+    }
+  ]
+}
