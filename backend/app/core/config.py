@@ -37,7 +37,7 @@ class Settings(BaseSettings):
 
     # Google Gemini API
     GEMINI_API_KEY: Optional[str] = None
-    GENERATION_MODEL: str = "gemini-2.5-flash"
+    GENERATION_MODEL: str = "gemini-3.8-flash"
     EMBEDDING_MODEL: str = "text-embedding-004"
     EMBEDDING_DIMENSION: int = 768
 
