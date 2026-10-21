@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-10-18T17:25:52Z",
+  "timestamp": "2026-10-21T05:05:34Z",
   "total_queries": 5,
   "retrieval_hit_rate_pct": 100.0,
   "abstention_accuracy_pct": 100.0,
   "citation_validity_pct": 100.0,
-  "average_latency_ms": 22.25,
+  "average_latency_ms": 28.29,
   "results": [
     {
       "id": "eval-1",
@@ -13,7 +13,7 @@
       "answer": "According to the source documents, In March 2026, Helios Labs announced the deployment of the Aurora-7 quantum processor. The system features 256 logical qubits with a fault-tolerant error threshold of 99.98%.  [quantum_computing_report.md]",
       "citations_count": 1,
       "passed": true,
-      "duration_ms": 31
+      "duration_ms": 39
     },
     {
       "id": "eval-2",
@@ -22,7 +22,7 @@
       "answer": "According to the source documents, The cooling apparatus operates at 15 millikelvin using a closed-loop helium-3 dilution refrigerator.  [quantum_computing_report.md]",
       "citations_count": 1,
       "passed": true,
-      "duration_ms": 14
+      "duration_ms": 21
     },
     {
       "id": "eval-3",
@@ -31,7 +31,7 @@
       "answer": "According to the source documents, Helios Labs invested $420 million over four years into the project. Operating margins for the quantum cloud platform are projected to reach 34% by Q4 2026.  [quantum_computing_report.md]",
       "citations_count": 1,
       "passed": true,
-      "duration_ms": 14
+      "duration_ms": 21
     },
     {
       "id": "eval-4",
@@ -40,7 +40,7 @@
       "answer": "I couldn't find enough information in the selected documents to answer that confidently. Try rephrasing the question or uploading a relevant source.",
       "citations_count": 0,
       "passed": true,
-      "duration_ms": 14
+      "duration_ms": 21
     },
     {
       "id": "eval-5",
