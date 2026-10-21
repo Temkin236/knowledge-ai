@@ -65,13 +65,13 @@ export const SettingsPage: React.FC = () => {
           <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800">
             <span className="text-zinc-500 block">Generation Model</span>
             <span className="font-semibold text-zinc-200 mt-1 block">
-              Google Gemini 2.5 Flash
+              Google Gemini 3.8 Flash
             </span>
           </div>
           <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800">
             <span className="text-zinc-500 block">Embedding Model</span>
             <span className="font-semibold text-zinc-200 mt-1 block">
-              Google text-embedding-004 (768 Dimensions)
+              Google Gemini Embedding (gemini-embedding-001, 768-dim)
             </span>
           </div>
           <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800">

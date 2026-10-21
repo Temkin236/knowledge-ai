@@ -54,6 +54,13 @@ export const CollectionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     enabled: !!user,
   });
 
+  // Auto-select most recent conversation if none is active
+  useEffect(() => {
+    if (conversations.length > 0 && !activeConversationId) {
+      setActiveConversationId(conversations[0].id);
+    }
+  }, [conversations, activeConversationId]);
+
   const selectedCollection =
     collections.find((c) => c.id === selectedCollectionId) || null;
 

@@ -47,6 +47,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     async function initAuth() {
+      if (typeof window !== "undefined" && window.location.search.includes("demo=true")) {
+        setToken("dev-token");
+        setUser({
+          id: "00000000-0000-0000-0000-000000000001",
+          email: "dev@knowledge.ai",
+          displayName: "Dev Engineer",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       if (isSupabaseConfigured && supabase) {
         try {
           const { data: { session } } = await supabase.auth.getSession();

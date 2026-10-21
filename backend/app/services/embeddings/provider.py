@@ -63,10 +63,18 @@ class EmbeddingProvider:
         delay = 1.0
         for attempt in range(max_retries):
             try:
-                # Synchronous SDK call wrapped safely
+                from google.genai import types
+
+                # Synchronous SDK call wrapped safely with output dimensionality
+                config = (
+                    types.EmbedContentConfig(output_dimensionality=self.dimension)
+                    if self.dimension
+                    else None
+                )
                 response = self.client.models.embed_content(
                     model=self.model_name,
                     contents=texts,
+                    config=config,
                 )
                 # response.embeddings is a list of ContentEmbedding objects
                 batch_vectors = []

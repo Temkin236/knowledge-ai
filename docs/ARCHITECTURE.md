@@ -29,9 +29,9 @@ graph TD
     end
 
     subgraph AI Model Layer
-        IngestionService <--> |Batch Embeddings| GeminiEmbed[Google Gemini Embedding API<br/>text-embedding-004]
+        IngestionService <--> |Batch Embeddings| GeminiEmbed[Google Gemini Embedding API<br/>gemini-embedding-001 768-dim]
         RAGGraph <--> |Query Embedding| GeminiEmbed
-        RAGGraph <--> |Grounded Generation| GeminiLLM[Google Gemini Generation API<br/>gemini-2.5-flash]
+        RAGGraph <--> |Grounded Generation| GeminiLLM[Google Gemini Generation API<br/>gemini-3.8-flash]
     end
 ```
 
@@ -57,7 +57,7 @@ graph TD
 - Multi-step validation: MIME type check, file signature validation, size limit enforcement, empty-content rejection.
 - Text cleaning and whitespace normalization preserving structural headings and paragraphs.
 - Token-aware chunking (approx 800 tokens, 120 token overlap) with source tracking (filename, page numbers, section headers, chunk indices).
-- Batched embedding generation with dimension verification (768 dimensions for `text-embedding-004`).
+- Batched embedding generation with dimension verification (768 dimensions for `gemini-embedding-001`).
 - Document state machine: `PENDING` -> `EXTRACTING` -> `CHUNKING` -> `EMBEDDING` -> `INDEXED` (or `FAILED` with actionable error diagnostics).
 
 ### D. RAG Engine & LangGraph Workflow

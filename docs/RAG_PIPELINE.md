@@ -24,7 +24,7 @@
   - `content_hash`
 
 ### Embeddings Generation
-- Model: `text-embedding-004` (Google Gemini)
+- Model: `gemini-embedding-001` (Google Gemini with 768-dimension output)
 - Output Vector Dimension: 768 dimensions
 - Batch size: 64 chunks per batch with exponential backoff on rate limits.
 - Validation: Vector dimension must strictly match configured dimension before database write.

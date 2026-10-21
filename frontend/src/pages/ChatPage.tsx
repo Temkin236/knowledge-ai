@@ -47,6 +47,24 @@ export const ChatPage: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isSending]);
 
+  // Auto-open citation drawer if ?drawer=true is present in URL
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      window.location.search.includes("drawer=true") &&
+      messages.length > 0 &&
+      !selectedCitation
+    ) {
+      for (const m of messages) {
+        if (m.citations && m.citations.length > 0) {
+          setSelectedCitation(m.citations[0]);
+          setIsDrawerOpen(true);
+          break;
+        }
+      }
+    }
+  }, [messages, selectedCitation]);
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !selectedCollectionId || isSending) return;
 

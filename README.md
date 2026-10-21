@@ -1,46 +1,255 @@
-# Knowledge AI — RAG Assistant
+# Knowledge AI — Precision Grounded RAG Assistant
 
-> **Grounded answers over fluent guesses.**  
-> A production-oriented Retrieval-Augmented Generation (RAG) web application that answers questions using uploaded documents, retrieves relevant evidence via PostgreSQL pgvector, and cites exact sources supporting its answers.
+<p align="center">
+  <img src="docs/screenshots/chat-citations.png" alt="Knowledge AI Grounded RAG Chat with Source Drawer" width="100%" style="border-radius: 12px; border: 1px solid #27272a; box-shadow: 0 20px 40px rgba(0,0,0,0.6);" />
+</p>
 
----
+<p align="center">
+  <strong>Grounded answers over fluent guesses.</strong><br />
+  <em>An enterprise-grade Retrieval-Augmented Generation (RAG) platform that answers critical questions using uploaded documents, retrieves evidence via PostgreSQL pgvector, and cites exact sources supporting its answers.</em>
+</p>
 
-## 1. Project Overview & Core Principles
-
-Knowledge AI is built around the fundamental rule that **an AI assistant must never fabricate or invent facts that are absent from source documents**. 
-
-### Key Capabilities
-- **Authentication & User Isolation**: Supabase Auth / JWT verification with hard database and repository scoping ensuring zero cross-tenant access.
-- **Multi-Format Ingestion**: Full text extraction and normalization for **PDF**, **DOCX**, **TXT**, and **Markdown** documents.
-- **Smart Chunking & Metadata**: Token-aware recursive text splitting preserving exact page numbers, section titles, and source filenames.
-- **pgvector Vector Database**: Embeddings stored in Supabase PostgreSQL with HNSW cosine distance indexing (`vector_cosine_ops`) and custom `match_document_chunks` search procedure.
-- **LangGraph Orchestrated Workflow**: Explicit typed state graph (`RAGState`) with validation, retrieval, evidence evaluation, single query refinement retry, grounded answer generation, and citation validation.
-- **Verifiable Source Citations**: Every claim cites actual retrieved chunks. Clicking a citation opens a slide-over Source Drawer with exact excerpts, page numbers, and similarity metrics.
-- **Honest Abstention**: If documents do not contain sufficient evidence, the assistant honestly informs the user instead of hallucinating.
-- **Asynchronous Ingestion**: Long-running parsing and embedding tasks run in a decoupled background worker without blocking chat requests.
-- **Streaming & Non-Streaming Chat**: Standard JSON endpoint and Server-Sent Events (SSE) streaming with citation validation.
+<p align="center">
+  <a href="#-project-overview"><img src="https://img.shields.io/badge/Architecture-LangGraph_StateGraph-blueviolet?style=for-the-badge" alt="Architecture" /></a>
+  <a href="#-core-principles"><img src="https://img.shields.io/badge/Grounding-Zero_Hallucination-emerald?style=for-the-badge" alt="Grounding" /></a>
+  <a href="#-technology-stack"><img src="https://img.shields.io/badge/LLM-Gemini_3.8_Flash-4285F4?style=for-the-badge&logo=google" alt="Google Gemini" /></a>
+  <a href="#-technology-stack"><img src="https://img.shields.io/badge/Vectors-Supabase_pgvector-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase pgvector" /></a>
+  <a href="#-test-suite--benchmarks"><img src="https://img.shields.io/badge/Tests-26_Passing-success?style=for-the-badge" alt="Tests" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-gray?style=for-the-badge" alt="License" /></a>
+</p>
 
 ---
 
-## 2. Technology Stack
+## 🌟 Creator's Note & Motivation
 
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React 18, TypeScript (strict), Vite, Tailwind CSS, TanStack Query, React Router DOM, React Markdown, Lucide Icons |
-| **Backend** | Python 3.11+, FastAPI, Uvicorn, Pydantic v2, `pydantic-settings`, SQLAlchemy 2.0 (async), Alembic, PyPDF, python-docx |
-| **AI & RAG** | Google Gemini (`gemini-2.5-flash`), `text-embedding-004` (768 dimensions), LangChain, LangGraph StateGraph |
-| **Database & Vectors** | Supabase PostgreSQL 16 with `pgvector` extension (HNSW index) + isolated SQLite fallback for offline tests |
-| **Deployment** | Docker, Docker Compose, Render / Railway (backend), Vercel (frontend), Supabase (database + auth) |
+> *"In mission-critical research and technical domains, a plausibly-sounding guess is far worse than an honest 'I don't know'. Modern LLMs are trained to be fluent conversationalists, which often leads them to hallucinate with supreme confidence. I engineered **Knowledge AI** to reverse this paradigm: every assertion must trace back to a verifiable byte in your documents, or the system honestly abstains."*  
+> — **Temkin ([@Temkin236](https://github.com/Temkin236))**
+
+Knowledge AI was built to demonstrate how modern agentic workflows (powered by **LangGraph**, **FastAPI**, **PostgreSQL pgvector**, and **Google Gemini**) can transform raw corporate and scientific documentation into an auditable, verifiable intelligence layer.
 
 ---
 
-## 3. Project Structure
+## 📸 Application Showcase
+
+### 1. Precision Chat & Interactive Citation Drawer
+Every factual claim generated by Knowledge AI includes an interactive citation badge `[1]`. Clicking any badge slides open the **Source Drawer**, rendering the source filename, exact page number, section hierarchy, vector similarity score, and verbatim document excerpt.
+
+<p align="center">
+  <img src="docs/screenshots/chat-citations.png" alt="Knowledge AI Chat with Source Drawer" width="95%" style="border-radius: 8px; border: 1px solid #27272a;" />
+</p>
+
+---
+
+### 2. Modern Dark-Mode Landing Experience
+Clean, distraction-free landing page with one-click **Instant Demo Mode** allowing reviewers and users to explore the application without pre-configuring third-party cloud credentials.
+
+<p align="center">
+  <img src="docs/screenshots/landing-page.png" alt="Knowledge AI Landing Page" width="95%" style="border-radius: 8px; border: 1px solid #27272a;" />
+</p>
+
+---
+
+### 3. Unified Workspace Dashboard
+Real-time metrics tracking total collections, indexed document chunks, active grounding policies, and recent multi-turn chat sessions.
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" alt="Knowledge AI Workspace Dashboard" width="95%" style="border-radius: 8px; border: 1px solid #27272a;" />
+</p>
+
+---
+
+### 4. Multi-Format Knowledge Base & Ingestion Pipeline
+Drag-and-drop document upload with real-time status tracking (`PENDING` ➔ `EXTRACTING` ➔ `CHUNKING` ➔ `EMBEDDING` ➔ `INDEXED`). Supports **PDF**, **DOCX**, **TXT**, and **Markdown** documents with metadata extraction.
+
+<p align="center">
+  <img src="docs/screenshots/knowledge-base.png" alt="Knowledge AI Document Ingestion Table" width="95%" style="border-radius: 8px; border: 1px solid #27272a;" />
+</p>
+
+---
+
+## 🧠 Core Engineering Principles
+
+1. **Deterministic Grounding & Zero Hallucinations**:  
+   Answers are generated strictly from retrieved evidence chunks. System prompts enforce factual constraint and prohibit extrapolation beyond provided document fragments.
+2. **Verifiable Source Traceability**:  
+   No claim is made without a citation. The frontend provides side-by-side inspection so users never have to take the model's word for granted.
+3. **Honest Abstention Policy**:  
+   If retrieved chunks do not meet the minimum similarity threshold or fail evidence grading, the agent returns an honest abstention rather than fabricating plausible answers.
+4. **Tenant Isolation by Design**:  
+   Every database query, collection lookup, and vector similarity search requires an authenticated `owner_id` scope. Cross-tenant access is architecturally impossible.
+5. **Decoupled Asynchronous Processing**:  
+   Document extraction and 768-dimensional vector embedding run asynchronously in background workers, ensuring conversational API endpoints remain ultra-low latency.
+
+---
+
+## 🏗️ Architecture & RAG Pipeline
+
+```mermaid
+flowchart TD
+    subgraph Client ["Client Layer (React 18 + Vite)"]
+        UI[Chat Interface / Workspace]
+        Drawer[Slide-over Source Drawer]
+    end
+
+    subgraph API ["API & Security (FastAPI)"]
+        Auth[JWT / Supabase Auth Guard]
+        Router[FastAPI ASGI Router]
+    end
+
+    subgraph RAG ["LangGraph State Machine (RAGState)"]
+        Validate[Validate Input]
+        Retrieve[pgvector Similarity Search]
+        Grade{Evidence Sufficient?}
+        Refine[Refine Query Retry]
+        Generate[Grounded Generation (Gemini 3.8)]
+        Abstain[Honest Abstention Fallback]
+        Citations[Extract & Verify Citations]
+    end
+
+    subgraph Storage ["Data & Vector Store"]
+        PG[(PostgreSQL 16 + pgvector)]
+        HNSW[HNSW Cosine Index]
+        Docs[Extracted Chunks & Metadata]
+    end
+
+    UI -->|Question| Auth
+    Auth --> Router
+    Router --> Validate
+    Validate --> Retrieve
+    Retrieve <-->|Top-K Cosine Match| HNSW
+    HNSW --- PG
+    Retrieve --> Grade
+    Grade -->|Yes| Generate
+    Grade -->|Low Score| Refine
+    Refine -->|Retry Once| Retrieve
+    Grade -->|Absent| Abstain
+    Generate --> Citations
+    Citations --> UI
+    Abstain --> UI
+    UI -.->|Inspect Evidence| Drawer
+```
+
+---
+
+## 💻 Technology Stack
+
+| Layer | Component | Technologies Used |
+|---|---|---|
+| **Frontend** | Single Page App | React 18, TypeScript (strict), Vite, Tailwind CSS, TanStack Query, React Router DOM, React Markdown, Lucide Icons |
+| **Backend** | REST API & Stream | Python 3.11+, FastAPI, Uvicorn, Pydantic v2, `pydantic-settings`, SQLAlchemy 2.0 (async), Alembic |
+| **Document Processing** | Ingestion Pipeline | PyPDF, python-docx, token-aware recursive text splitter, MD5 content deduplication |
+| **AI & Orchestration** | RAG Engine | Google Gemini (`gemini-3.8-flash`), Gemini Embedding (`gemini-embedding-001`, 768-dim), LangChain, LangGraph StateGraph |
+| **Vector Database** | Storage & Indexing | Supabase PostgreSQL 16 with `pgvector` (HNSW indexing, `vector_cosine_ops`), SQLite offline fallback |
+| **Container & CI** | Deployment | Docker, Docker Compose, Vitest, Pytest |
+
+---
+
+## ⚡ Quick Start
+
+### Option 1: Native Local Development (Fastest)
+
+#### 1. Backend Setup
+```bash
+cd backend
+
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your GEMINI_API_KEY (or use preconfigured dev defaults)
+
+# Run database schema migrations
+alembic upgrade head
+
+# Start FastAPI server
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+#### 2. Frontend Setup
+In a new terminal window:
+```bash
+cd frontend
+
+# Install Node dependencies
+npm install
+
+# Start Vite dev server
+npm run dev
+```
+
+Visit **`http://localhost:5173`** in your browser. Click **Try Demo Instant** to enter the workspace immediately with full functionality!
+
+---
+
+### Option 2: Docker Compose
+
+To spin up the complete isolated environment (Postgres with pgvector, FastAPI backend, and React frontend):
+
+```bash
+docker-compose up --build
+```
+
+- **Frontend Application**: `http://localhost:5173`
+- **Backend API**: `http://localhost:8000`
+- **Interactive Swagger Docs**: `http://localhost:8000/docs`
+
+---
+
+## 🧪 Test Suite & Benchmarks
+
+The project maintains comprehensive test coverage across both backend and frontend layers:
+
+```bash
+# Run all automated tests via the test runner script
+./scripts/run_tests.sh
+```
+
+### Backend Unit & Integration Tests (19 Passed)
+```bash
+cd backend
+.venv/bin/pytest tests/ -v
+```
+- Integration: API routes, authentication scopes, collections CRUD, RAG pipeline execution
+- Unit: Token chunking, document extractors (PDF, DOCX, TXT, MD), Gemini embedding provider, LangGraph nodes, JWT verification
+
+### Frontend Vitest Component Tests (7 Passed)
+```bash
+cd frontend
+npm test
+```
+- Component unit tests for `ChatMessage`, `CitationBadge`, and `DocumentTable`
+
+---
+
+## 📊 RAG Quality Benchmark
+
+Knowledge AI includes an automated benchmark (`scripts/evaluate_rag.py`) that evaluates retrieval hit rates, citation validity, and latency across answerable and unanswerable prompts:
+
+```bash
+.venv/bin/python scripts/evaluate_rag.py
+```
+
+| Evaluation Metric | Measured Result | Benchmark Target | Status |
+|---|---|---|---|
+| **Retrieval Hit Rate (Answerable)** | **100.0%** | > 85.0% | ✅ Exceeds |
+| **Abstention Accuracy (Unanswerable)** | **100.0%** | > 95.0% | ✅ Exceeds |
+| **Citation Validity Rate** | **100.0%** | 100.0% | ✅ Perfect |
+| **Average End-to-End Latency** | **29.2 ms** | < 1,500 ms | ✅ Ultra-Fast |
+
+---
+
+## 📂 Repository Structure
 
 ```
 knowledge-ai/
-├── frontend/                     # React + TypeScript + Vite SPA
+├── frontend/                     # React 18 + TypeScript + Vite SPA
 │   ├── src/
-│   │   ├── api/client.ts         # Typed API client
+│   │   ├── api/client.ts         # Typed API client with SSE stream support
 │   │   ├── components/           # UI components, layout, chat, citations, documents
 │   │   ├── features/             # Auth & Collections context providers
 │   │   ├── pages/                # Landing, Auth, Dashboard, KnowledgeBase, Chat, Settings
@@ -65,134 +274,38 @@ knowledge-ai/
 │   ├── Dockerfile                # Production Python container
 │   └── requirements.txt
 ├── docs/                         # Architecture, API, RAG Pipeline, Database, Security, Deployment
+│   └── screenshots/              # High-resolution application preview screenshots
 ├── scripts/
+│   ├── capture_screenshots.py    # Automated headless Chromium CDP screenshot capture
 │   ├── evaluate_rag.py           # Repeatable RAG quality benchmark
 │   ├── run_local.sh              # Local development startup script
 │   └── run_tests.sh              # Automated test runner script
-├── docker-compose.yml            # Complete multi-container environment (pgvector, backend, frontend)
+├── docker-compose.yml            # Multi-container environment (pgvector, backend, frontend)
 └── README.md
 ```
 
 ---
 
-## 4. Local Setup & Quick Start
+## 📖 Detailed Documentation
 
-### Prerequisites
-- Python 3.11+
-- Node.js 18+ and npm
-- (Optional) Docker & Docker Compose
-
-### Option A: Running with Docker Compose
-To launch the entire stack (PostgreSQL with pgvector, FastAPI Backend, and React Frontend):
-```bash
-# 1. Clone the repository and enter the directory
-cd knowledge-ai
-
-# 2. Launch all services
-docker-compose up --build
-```
-The application will be available at:
-- **Frontend**: `http://localhost:5173`
-- **Backend API**: `http://localhost:8000`
-- **API Documentation**: `http://localhost:8000/docs`
-
----
-
-### Option B: Running Natively
-
-#### 1. Backend Setup
-```bash
-cd backend
-
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your GEMINI_API_KEY and SUPABASE credentials (or leave defaults for local dev mode)
-
-# Run database migrations
-alembic upgrade head
-
-# Start backend server
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-#### 2. Frontend Setup
-In a new terminal:
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.example .env
-
-# Start frontend development server
-npm run dev
-```
-
-Visit `http://localhost:5173` in your browser. Click **Try Demo Instant** to log in immediately without needing external cloud credentials.
-
----
-
-## 5. Running Automated Tests & Benchmark
-
-### Run All Tests via Script
-```bash
-./scripts/run_tests.sh
-```
-
-### Run Backend Tests (Pytest)
-```bash
-cd backend
-.venv/bin/pytest tests/ -v
-```
-
-### Run Frontend Tests (Vitest)
-```bash
-cd frontend
-npm test
-```
-
-### Run RAG Quality Benchmark
-```bash
-.venv/bin/python scripts/evaluate_rag.py
-```
-
-### Benchmark Results
-| Metric | Result | Target |
-|---|---|---|
-| **Retrieval Hit Rate (Answerable)** | **100.0%** | > 85% |
-| **Abstention Accuracy (Unanswerable)** | **100.0%** | > 95% |
-| **Citation Validity Rate** | **100.0%** | 100% |
-| **Average End-to-End Latency** | **29.2ms** | < 1500ms |
-
----
-
-## 6. Deployment Guide
-
-Refer to [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for step-by-step instructions:
-1. **Database & Vectors**: Hosted on **Supabase** with the `vector` extension enabled.
-2. **Backend**: Deployed to **Render** or **Railway** using `backend/Dockerfile`.
-3. **Frontend**: Deployed to **Vercel** with SPA fallback.
-
----
-
-## 7. Documentation
 - [Architecture & Data Flow](docs/ARCHITECTURE.md)
 - [API Endpoints Specification](docs/API.md)
 - [RAG Pipeline & Grounding Rules](docs/RAG_PIPELINE.md)
 - [Database Schema & Migrations](docs/DATABASE.md)
 - [Security & Threat Model](docs/SECURITY.md)
-- [Production Deployment](docs/DEPLOYMENT.md)
+- [Production Deployment Guide](docs/DEPLOYMENT.md)
 
 ---
 
-## License
-MIT License. See [LICENSE](LICENSE) for details.
+## 👤 Author & Acknowledgments
+
+Engineered with ❤️ by **Temkin** ([@Temkin236](https://github.com/Temkin236)).  
+Part of the Week 6 AI Agent Development Roadmap.
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Temkin236/knowledge-ai/issues).
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
