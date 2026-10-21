@@ -1,6 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import React from "react";
 import { DocumentTable } from "../../src/components/documents/DocumentTable";
 import { Document } from "../../src/types";
 
